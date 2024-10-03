@@ -1,0 +1,13 @@
+@import "tailwindcss/base";
+@import "tailwindcss/components";
+@import "tailwindcss/utilities";
+
+.text-custom-teal {
+  color: #03543f;
+}
+
+.bg-custom-teal {
+  background-color: #03543f;
+}
+
+/* 추가적인 커스텀 스타일이 필요하다면 여기에 작성하세요 */
