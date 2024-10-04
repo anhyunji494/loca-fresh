@@ -1,11 +1,16 @@
 import React from "react";
 import { Menu, Search, ShoppingBag } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
+import { useCart } from "../../hooks/useCart"; // 경로 수정
 
 const Header = ({ setMenuOpen }) => {
   const location = useLocation();
 
   const isActive = (path) => location.pathname === path;
+
+  // 장바구니
+  const { cart } = useCart();
+  const cartItemsCount = cart.reduce((total, item) => total + item.quantity, 0);
 
   return (
     <header className="fixed z-50 w-full bg-white shadow-md">
@@ -53,7 +58,15 @@ const Header = ({ setMenuOpen }) => {
             농부들
           </Link>
           <Search className="w-5 h-5 text-gray-600 cursor-pointer" />
-          <ShoppingBag className="w-5 h-5 text-gray-600 cursor-pointer" />
+
+          <Link to="/cart" className="relative">
+            <ShoppingBag className="w-5 h-5 text-gray-600 cursor-pointer" />
+            {cartItemsCount > 0 && (
+              <span className="absolute flex items-center justify-center w-5 h-5 text-xs text-white bg-red-500 rounded-full -top-2 -right-2">
+                {cartItemsCount}
+              </span>
+            )}
+          </Link>
         </div>
         <div className="md:hidden">
           <Menu

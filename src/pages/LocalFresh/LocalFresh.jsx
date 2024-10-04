@@ -16,7 +16,7 @@ import { Link } from "react-router-dom";
 import Header from "../../components/Header/Header";
 import MobileMenu from "../../components/MobileMenu/MobileMenu";
 import Footer from "../../components/Footer/Footer";
-
+import { useCart } from "../../hooks/useCart"; // components 제거
 const products = [
   {
     id: 1,
@@ -74,6 +74,7 @@ const LocalFresh = () => {
   const menuAnimation = useSpring({
     transform: menuOpen ? "translateX(0%)" : "translateX(-100%)",
   });
+  const { cart, dispatch } = useCart();
 
   const NextArrow = ({ onClick }) => {
     return (
@@ -122,6 +123,11 @@ const LocalFresh = () => {
         },
       },
     ],
+  };
+
+  // 장바구니
+  const addToCart = (product) => {
+    dispatch({ type: "ADD_TO_CART", payload: product });
   };
 
   return (
@@ -180,7 +186,10 @@ const LocalFresh = () => {
                       <p className="mb-4 text-gray-600">
                         {product.price.toLocaleString()}원
                       </p>
-                      <button className="w-full py-2 text-white transition duration-300 rounded-full bg-custom-teal hover:bg-teal-900">
+                      <button
+                        onClick={() => addToCart(product)}
+                        className="w-full py-2 text-white transition duration-300 rounded-full bg-custom-teal hover:bg-teal-900"
+                      >
                         장바구니에 담기
                       </button>
                     </div>
@@ -201,9 +210,11 @@ const LocalFresh = () => {
               <br />
               환경을 보호하는 데 기여하고 있습니다.
             </p>
-            <button className="px-8 py-3 mt-8 text-lg font-semibold text-white transition duration-300 rounded-full bg-custom-teal hover:bg-teal-900">
-              더 알아보기
-            </button>
+            <Link to="/story">
+              <button className="px-8 py-3 mt-8 text-lg font-semibold text-white transition duration-300 rounded-full bg-custom-teal hover:bg-teal-900">
+                더 알아보기
+              </button>
+            </Link>
           </div>
         </section>
       </main>

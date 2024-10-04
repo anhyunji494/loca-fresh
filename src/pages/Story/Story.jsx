@@ -42,7 +42,7 @@ const Story = () => {
             <div className="flex flex-col items-center md:flex-row">
               <div className="mb-8 md:w-1/2 md:mb-0 md:pr-8">
                 <img
-                  src="/images/founders.jpg"
+                  src="introduce.jpg"
                   alt="LocalFresh 창립자들"
                   className="rounded-lg shadow-md"
                 />

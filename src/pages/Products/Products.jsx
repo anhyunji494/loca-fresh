@@ -1,6 +1,5 @@
 import React, { useState } from "react";
-import { Search, ShoppingBag, Menu, X } from "lucide-react";
-import { Link } from "react-router-dom";
+import { useCart } from "../../hooks/useCart"; // 이 줄을 추가합니다
 import Header from "../../components/Header/Header";
 import MobileMenu from "../../components/MobileMenu/MobileMenu";
 import Footer from "../../components/Footer/Footer";
@@ -61,21 +60,23 @@ const categories = ["전체", "과일", "채소"];
 const Products = () => {
   const [menuOpen, setMenuOpen] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState("전체");
+  const { dispatch } = useCart(); // useCart 훅을 사용합니다
 
   const filteredProducts =
     selectedCategory === "전체"
       ? products
       : products.filter((product) => product.category === selectedCategory);
 
+  // 장바구니에 추가하는 함수를 정의합니다
+  const addToCart = (product) => {
+    dispatch({ type: "ADD_TO_CART", payload: product });
+  };
+
   return (
     <div className="min-h-screen font-sans bg-white">
-      {/* Header */}
       <Header setMenuOpen={setMenuOpen} />
-
-      {/* Mobile Menu */}
       <MobileMenu isOpen={menuOpen} setMenuOpen={setMenuOpen} />
 
-      {/* Main Content */}
       <main className="container px-4 pt-24 pb-12 mx-auto">
         <h1 className="mb-8 text-4xl font-bold text-center">모든 상품</h1>
 
@@ -113,7 +114,10 @@ const Products = () => {
                 <p className="mb-4 text-gray-600">
                   {product.price.toLocaleString()}원
                 </p>
-                <button className="w-full py-2 text-white transition duration-300 rounded-full bg-custom-teal hover:bg-teal-900">
+                <button
+                  className="w-full py-2 text-white transition duration-300 rounded-full bg-custom-teal hover:bg-teal-900"
+                  onClick={() => addToCart(product)} // 여기를 수정합니다
+                >
                   장바구니에 담기
                 </button>
               </div>
@@ -122,7 +126,6 @@ const Products = () => {
         </div>
       </main>
 
-      {/* Footer */}
       <Footer />
     </div>
   );
