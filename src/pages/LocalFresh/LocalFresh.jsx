@@ -16,7 +16,8 @@ import { Link } from "react-router-dom";
 import Header from "../../components/Header/Header";
 import MobileMenu from "../../components/MobileMenu/MobileMenu";
 import Footer from "../../components/Footer/Footer";
-import { useCart } from "../../hooks/useCart"; // components 제거
+import { useCart } from "../../hooks/useCart";
+
 const products = [
   {
     id: 1,
@@ -67,13 +68,25 @@ const products = [
     category: "채소",
   },
 ];
-
 const LocalFresh = () => {
   const [menuOpen, setMenuOpen] = useState(false);
+  const [searchOpen, setSearchOpen] = useState(false);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [isVisible, setIsVisible] = useState(false); // 모달이 화면에 보이는 상태
 
   const menuAnimation = useSpring({
     transform: menuOpen ? "translateX(0%)" : "translateX(-100%)",
   });
+  const searchAnimation = useSpring({
+    transform: searchOpen ? "translateY(0%)" : "translateY(-100%)",
+    opacity: searchOpen ? 1 : 0,
+    onRest: () => {
+      if (!searchOpen) {
+        setIsVisible(false);
+      }
+    },
+  });
+
   const { cart, dispatch } = useCart();
 
   const NextArrow = ({ onClick }) => {
@@ -125,18 +138,79 @@ const LocalFresh = () => {
     ],
   };
 
-  // 장바구니
+  // 장바구니 추가 함수
   const addToCart = (product) => {
     dispatch({ type: "ADD_TO_CART", payload: product });
+  };
+
+  // 검색어에 맞는 상품 필터링
+  const filteredProducts = products.filter((product) =>
+    product.name.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
+  // 모달 바깥을 클릭했을 때 모달 닫기
+  const handleOverlayClick = (e) => {
+    if (e.target.id === "search-overlay") {
+      setSearchOpen(false);
+    }
+  };
+
+  const handleSearchOpen = () => {
+    setIsVisible(true);
+    setSearchOpen(true);
   };
 
   return (
     <div className="min-h-screen font-sans bg-white">
       {/* Header */}
-      <Header setMenuOpen={setMenuOpen} />
+      <Header setMenuOpen={setMenuOpen} setSearchOpen={handleSearchOpen} />
 
       {/* Mobile Menu */}
       <MobileMenu isOpen={menuOpen} setMenuOpen={setMenuOpen} />
+
+      {/* Search Overlay */}
+      {isVisible && (
+        <animated.div
+          id="search-overlay"
+          style={searchAnimation}
+          className="fixed inset-0 z-40 flex items-center justify-center bg-black bg-opacity-50"
+          onClick={handleOverlayClick}
+        >
+          <div className="relative w-full max-w-lg p-8 bg-white rounded-lg">
+            <button
+              onClick={() => setSearchOpen(false)}
+              className="absolute top-0 right-0 mt-2 mr-2 text-gray-500"
+            >
+              <X size={24} />
+            </button>
+            <input
+              type="text"
+              placeholder="상품을 검색해보세요"
+              className="w-full px-4 py-2 border rounded-full focus:outline-none focus:ring-2 focus:ring-teal-500"
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+            />
+            <div className="mt-4">
+              {filteredProducts.length > 0 ? (
+                <ul>
+                  {filteredProducts.map((product) => (
+                    <li key={product.id} className="mb-2">
+                      <Link
+                        to={`/products/${product.id}`}
+                        className="block px-4 py-2 bg-gray-100 rounded hover:bg-gray-200"
+                      >
+                        {product.name}
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              ) : (
+                <p className="text-gray-600">검색 결과가 없습니다.</p>
+              )}
+            </div>
+          </div>
+        </animated.div>
+      )}
 
       {/* Main Content */}
       <main className="pt-20">
@@ -164,6 +238,7 @@ const LocalFresh = () => {
             </Link>
           </div>
         </section>
+
         {/* Featured Products */}
         <section className="py-20 bg-gray-100">
           <div className="container px-4 mx-auto">
@@ -205,10 +280,9 @@ const LocalFresh = () => {
           <div className="container px-4 mx-auto text-center">
             <h2 className="mb-8 text-3xl font-bold">우리의 이야기</h2>
             <p className="max-w-3xl mx-auto text-xl text-gray-600">
-              LocalFresh는 지역 농부들과 소비자를 직접 연결합니다. <br />
-              우리는 신선하고 건강한 먹거리를 통해 지역 경제를 활성화하고
-              <br />
-              환경을 보호하는 데 기여하고 있습니다.
+              LocalFresh는 지역 농부들과 소비자를 직접 연결합니다. <br /> 우리는
+              신선하고 건강한 먹거리를 통해 지역 경제를 활성화하고 <br /> 환경을
+              보호하는 데 기여하고 있습니다.
             </p>
             <Link to="/story">
               <button className="px-8 py-3 mt-8 text-lg font-semibold text-white transition duration-300 rounded-full bg-custom-teal hover:bg-teal-900">

@@ -3,7 +3,7 @@ import { Menu, Search, ShoppingBag } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
 import { useCart } from "../../hooks/useCart"; // 경로 수정
 
-const Header = ({ setMenuOpen }) => {
+const Header = ({ setMenuOpen, setSearchOpen = () => {} }) => {
   const location = useLocation();
 
   const isActive = (path) => location.pathname === path;
@@ -57,7 +57,12 @@ const Header = ({ setMenuOpen }) => {
           >
             농부들
           </Link>
-          <Search className="w-5 h-5 text-gray-600 cursor-pointer" />
+          <Search
+            className="w-5 h-5 text-gray-600 cursor-pointer"
+            onClick={() =>
+              typeof setSearchOpen === "function" && setSearchOpen(true)
+            }
+          />
 
           <Link to="/cart" className="relative">
             <ShoppingBag className="w-5 h-5 text-gray-600 cursor-pointer" />

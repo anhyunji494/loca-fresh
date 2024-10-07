@@ -19,9 +19,9 @@ const Cart = () => {
   const total = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
 
   return (
-    <div className="flex flex-col min-h-screen">
+    <div className="flex flex-col min-h-screen ">
       <Header />
-      <main className="container flex-grow px-4 py-8 mx-auto">
+      <main className="container flex-grow px-4 py-8 mx-auto mt-20">
         <h1 className="mb-8 text-3xl font-bold text-custom-teal">장바구니</h1>
         {cart.length === 0 ? (
           <p className="text-gray-600">장바구니가 비어있습니다.</p>
