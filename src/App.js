@@ -1,5 +1,5 @@
 import React from "react";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { HashRouter as Router, Routes, Route } from "react-router-dom";
 import LocalFresh from "./pages/LocalFresh/LocalFresh";
 import Products from "./pages/Products/Products";
 import Story from "./pages/Story/Story";
