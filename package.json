@@ -28,7 +28,7 @@
     "eject": "react-scripts eject",
     "deploy": "gh-pages -d build"
   },
-  "homepage": "https://anhyunji494.github.io/local-fresh-build/",
+  "homepage": "https://anhyunji494.github.io/loca-fresh/",
   "eslintConfig": {
     "extends": [
       "react-app",
